@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Создать объявление</title>
+    <!-- Подключение Bootstrap и пользовательских стилей -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+       body {
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.navbar {
+    background-color: #007bff;
+    color: white;
+}
+
+.jumbotron {
+    background: url('https://source.unsplash.com/1600x900/?nature,water') center center;
+    background-size: cover;
+    color: white;
+    text-align: center;
+    padding: 100px 0;
+    margin-bottom: 50px;
+    height: 100vh;
+    position: relative;
+}
+
+.form-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 600px;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.1);
+}
+
+h1,
+h2 {
+    color: #007bff;
+}
+
+.lead {
+    font-size: 1.25rem;
+    color: #ced4da;
+}
+
+.btn {
+    font-size: 1rem;
+    padding: 10px 20px;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+    border-color: #545b62;
+}
+
+.btn-return,
+.btn-category {
+    font-size: 1rem;
+    padding: 10px 20px;
+    margin-right: 10px;
+}
+
+.btn-return,
+.btn-category {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+.btn-return:hover,
+.btn-category:hover {
+    background-color: #5a6268;
+    border-color: #545b62;
+}
+    </style>
+</head>
+
+<body>
+
+    <!-- Верхнее меню -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="{% url 'product_list' %}">NEXT</a>
+        <div>
+            <img src="/media/logoup.png" alt="">
+        </div>
+        <!-- Добавьте другие элементы навигации, если нужно -->
+    </nav>
+    <!-- Фоновое изображение -->
+    <div class="jumbotron">
+       
+    </div>
+
+    <!-- Форма для создания товара с загрузкой изображения -->
+    <div class="form-container">
+        <h1 class="display-4">Создать объявление</h1>
+        <form method="post" action="{% url 'create_product' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Создать объявление</button>
+            <a href="{% url 'product_list' %}" class="btn btn-secondary btn-return">Вернуться назад</a>
+        </form>
+    </div>
+
+    <!-- Подключение Bootstrap JS (если нужно) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Скрипт для обработки выбора категории из модального окна -->
+    <script>
+        $(document).ready(function () {
+            $('.btn-category-modal').click(function () {
+                var selectedCategoryId = $(this).data('category-id');
+                $('#id_category').val(selectedCategoryId);
+            });
+        });
+    </script>
+</body>
+
+</html>

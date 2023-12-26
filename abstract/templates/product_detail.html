@@ -1,0 +1,178 @@
+<!-- product_detail.html -->
+{% extends 'base_generic.html' %}
+
+{% block content %}
+
+  <!-- Контент страницы -->
+  <div class="container mt-5">
+    <div class="row">
+      <div class="col-md-8">
+        <!-- Карточка продукта -->
+        <div class="card">
+          <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.title }}">
+          <div class="card-body">
+            <h1 class="card-title">{{ product.title }}</h1>
+            <p class="card-text">Описание: {{ product.description }}</p>
+            <p class="card-text">Цена: {{ product.price }} ₸</p>
+            <p class="card-text">Категория: {{ product.category }}</p>
+            <p class="card-text">Автор: <a href="#" data-toggle="modal" data-target="#authorModal">{{ product.seller }}</a></p>
+            <p class="card-text">Город: {{ product.city }}</p>
+            <p class="card-text">Адресс: {{ product.adres }}</p>
+          </div>
+        </div>
+        <div class="mt-5">
+          <!-- Блок с отзывами -->
+          <h2>Отзывы</h2>
+          {% for review in reviews %}
+            <div class="card mb-3">
+              <div class="card-body">
+                <h5 class="card-title">Автор: {{ review.user.username }}</h5>
+                <p class="card-text">Описание: {{ review.text }}</p>
+                <p class="card-text">Рейтинг: {{ review.rating }}</p>
+                <p class="card-text"><small class="text-muted">Дата: {{ review.created_at }}</small></p>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+        <!-- Модальное окно с информацией об авторе -->
+        <div class="modal fade" id="authorModal" tabindex="-1" role="dialog" aria-labelledby="authorModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="authorModalLabel">Информация об авторе</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <p><strong>Имя автора:</strong> {{ product.seller }}</p>
+                <!-- Добавьте другие поля по вашему усмотрению -->
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                <a href="{% url 'view_other_user_profile' username=product.seller.username %}" class="btn btn-primary">Перейти на профиль</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <!-- Блок с информацией об авторе и кнопкой -->
+        <div class="card mt-4">
+          <div class="card-body">
+            <h2 class="card-title">Информация об авторе</h2>
+            <p><strong>Имя автора:</strong> {{ product.seller }}</p>
+            <a href="{% url 'view_other_user_profile' username=product.seller.username %}" class="btn btn-primary">Перейти на профиль</a>
+            <!-- Кнопка "Показать номер телефона" с модальным окном -->
+        <button type="button" class="btn btn-info mt-2" data-toggle="modal" data-target="#phoneModal">
+          Показать номер телефона
+      </button>
+ <!-- Добавьте другие блоки, в том числе кнопку "Показать похожие товары" -->
+         <a href="{% url 'similar_products' product.id %}" class="btn btn-primary mt-2">Показать похожие товары</a>
+         
+        <h1></h1>
+         <form method="post" action="{% url 'add_to_favorites' product.id %}">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-primary">Добавить в избранное</button>
+        </form>
+
+      <!-- Модальное окно с номером телефона -->
+      <div class="modal fade" id="phoneModal" tabindex="-1" role="dialog" aria-labelledby="phoneModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h5 class="modal-title" id="phoneModalLabel">Номер телефона автора</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                      </button>
+                  </div>
+                  <div class="modal-body">
+                      <!-- Здесь используйте переменную, содержащую номер телефона автора -->
+                      <p><strong>Номер телефона:</strong> {{ product.seller.profile.phone_number }}</p>
+                  </div>
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                  </div>
+              </div>
+          </div>
+          </div>
+        </div>
+            
+       
+        <div class="mt-5">
+          <h2 class="text-center">Сравнение цен</h2>
+        
+          {% if avg_price_comparison %}
+            <div class="card mt-3">
+              <div class="card-body">
+                <h5 class="card-title">Средняя цена в категории:</h5>
+                <p class="card-text h3 font-weight-bold">₸{{ avg_price_comparison.category_avg_price }}</p>
+                <h5 class="card-title">Цена текущего товара:</h5>
+                <p class="card-text h3 font-weight-bold">₸{{ product.price }}</p>
+        
+                {% if avg_price_comparison.is_cheaper %}
+                  <p class="text-success h4">
+                    <i class="fas fa-arrow-up"></i>
+                    Этот товар дешевле средней цены в категории.
+                  </p>
+                {% else %}
+                  <p class="text-danger h4">
+                    <i class="fas fa-arrow-down"></i>
+                    Этот товар дороже средней цены в категории.
+                  </p>
+                {% endif %}
+        
+                <!-- Шкала сравнения цен с использованием иконок -->
+                <div class="mt-4 d-flex align-items-center justify-content-between">
+                  {% if avg_price_comparison.is_cheaper %}
+                    <span class="text-muted">Низкая цена</span>
+                    <i data-feather="arrow-up" class="text-success mx-2"></i>
+                  {% else %}
+                    <p class="text-success h4">
+                      <span class="text-muted">Высокая цена</span>
+                      <i data-feather="arrow-down" class="text-danger mx-2"></i>
+                    </p>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          {% else %}
+            <p class="text-center mt-3">Нет данных для сравнения цен.</p>
+          {% endif %}
+        </div>
+
+        <!-- Форма создания отзыва -->
+        <div class="card mt-4">
+          <div class="card-body">
+            <h2 class="card-title">Оставить отзыв</h2>
+            <form method="post" action="" class="animated-form">
+              {% csrf_token %}
+              {{ form.as_p }}
+              <button type="submit" class="btn btn-primary">Оставить отзыв</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    
+  </div>
+
+  <style>
+    /* Пользовательские стили для анимации формы */
+    .animated-form {
+      animation: fadeInUp 0.5s ease;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+{% endblock %}

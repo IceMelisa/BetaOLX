@@ -1,0 +1,69 @@
+<!-- view_other_user_profile.html -->
+
+{% extends 'base_generic.html' %}
+
+{% block content %}
+  <div class="container mt-5">
+    <div class="row">
+      <div class="col-md-8">
+        <div class="user-profile text-center animate__animated animate__fadeIn">
+          <h1>{{ user.username }}</h1>
+          <p>Email: {{ user.email }}</p>
+          <!-- Дополнительные данные о пользователе... -->
+        </div>
+
+        <div class="user-products mt-4">
+          <h2 class="animate__animated animate__fadeIn">Продукты пользователя</h2>
+          <div class="row">
+            {% for product in user_products %}
+              <div class="col-md-4 mb-4 animate__animated animate__fadeInUp">
+                <div class="card">
+                  <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.title }}" style="height: 200px; object-fit: cover;">
+                  <div class="card-body">
+                    <h5 class="card-title">{{ product.title }}</h5>
+                    <p class="card-text">Описание: {{ product.description|truncatechars:50 }}</p>
+                    <p class="card-text">Цена: {{ product.price }} ₸</p>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    /* Дополнительные стили могут быть добавлены здесь */
+
+    .user-profile {
+      animation: fadeIn 1s ease;
+    }
+
+    .user-products .card {
+      animation: fadeInUp 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+{% endblock %}

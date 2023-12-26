@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f8f9fa;
+        }
+
+        .error-container {
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.1);
+            background-color: #ffffff;
+        }
+
+        .error-message {
+            font-size: 24px;
+            color: #dc3545;
+            margin-bottom: 20px;
+        }
+
+        .login-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .login-link:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <div class="error-message">
+            <img src="https://avatars.mds.yandex.net/i?id=16174f558f1b59707bd89c15d309850a_l-10928048-images-thumbs&n=13" alt="">
+            <h1>Извините, вы не авторизированны</h1>
+            {{ error_message }}
+        </div>
+        <a href="{% url 'loginn' %}" class="login-link">Войти в систему</a>
+    </div>
+</body>
+</html>

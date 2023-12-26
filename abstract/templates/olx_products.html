@@ -1,0 +1,45 @@
+<!-- ваш_проект/ваше_приложение/templates/olx_products.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OLX Products</title>
+    <!-- Подключение Bootstrap для стилизации страницы (по желанию) -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<body>
+
+    <div class="container mt-5">
+        <h1>OLX Products</h1>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th scope="col">Наименование</th>
+                    <th scope="col">Цена</th>
+                    <th scope="col">Категория</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if products %}
+                    {% for product in products %}
+                        <tr>
+                            <td>{{ product.title }}</td>
+                            <td>{{ product.price }}</td>
+                            <td>{{ product.category }}</td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="3">Ошибка при загрузке данных</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+
+</body>
+
+</html>

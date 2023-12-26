@@ -1,0 +1,81 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+<div class="container-fluid p-0">
+    <!-- Верхнее меню как на Авито -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <!-- Код верхнего меню... -->
+    </nav>
+
+    <!-- Профиль пользователя -->
+    <div class="container mt-4 animate__animated animate__fadeIn">
+        <h2 class="mb-4">Добро пожаловать, {{ user.username }}</h2>
+
+        <!-- Добавленная кнопка выхода из профиля -->
+        <a href="{% url 'custom_logout' %}" class="btn btn-danger mb-2">Выйти из профиля</a>
+        <a href="{% url 'favorites' %}" class="btn btn-info mb-2">Избранное</a>
+
+        <!-- Карточка пользователя -->
+        <div class="card mb-4">
+            <div class="card-body">
+               
+                <!-- Информация о пользователе -->
+                <p class="card-text"><strong>Email:</strong> {{ user.email }}</p>
+                <p class="card-text"><strong>Имя:</strong> {{ user.profile.firstname }}</p>
+                <p class="card-text"><strong>Фамилия:</strong> {{ user.profile.lastname }}</p>
+                <p class="card-text"><strong>Номер телефона:</strong> {{ user.profile.phone_number }}</p>
+               
+                
+                    <!-- Личные публикации пользователя -->
+                    <h3 class="mt-4">Личные публикации</h3>
+                    <div class="row mb-4">
+                        {% for product in products %}
+                            <div class="col-md-4 mb-4">
+                                <div class="card">
+                                    <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.title }}" style="height: 200px; object-fit: cover;">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ product.title }}</h5>
+                                        <p class="card-text">{{ product.description|truncatechars:50 }}</p>
+                                        <div class="d-flex flex-column align-items-center">
+                                            <span class="badge badge-primary badge-pill mb-2">₸{{ product.price }}</span>
+                                            <a href="{% url 'product_detail' product.id %}" class="btn btn-primary mb-2">Подробнее</a>
+                                            {% if product.seller == user %}
+                                                <a href="{% url 'edit_product' product.pk %}" class="btn btn-secondary mb-2">Редактировать</a>
+                                                <button class="btn btn-danger" data-toggle="modal" data-target="#deleteProductModal{{ product.pk }}">Удалить</button>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        
+    <!-- Модальное окно подтверждения удаления продукта -->
+    {% for product in products %}
+    <div class="modal fade" id="deleteProductModal{{ product.pk }}" tabindex="-1" role="dialog" aria-labelledby="deleteProductModalLabel{{ product.pk }}" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteProductModalLabel{{ product.pk }}">Удаление продукта</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Вы уверены, что хотите удалить этот продукт? Это действие нельзя отменить.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                    <a href="{% url 'delete_product' product.pk %}" class="btn btn-danger">Удалить</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+</div>
+{% endblock %}
+
