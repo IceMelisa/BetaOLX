@@ -2,31 +2,31 @@
 
 {% block content %}
 <div class="container-fluid p-0">
-    <!-- Верхнее меню как на Авито -->
+    
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <!-- Код верхнего меню... -->
+        
     </nav>
 
-    <!-- Профиль пользователя -->
+   
     <div class="container mt-4 animate__animated animate__fadeIn">
         <h2 class="mb-4">Добро пожаловать, {{ user.username }}</h2>
 
-        <!-- Добавленная кнопка выхода из профиля -->
+        
         <a href="{% url 'custom_logout' %}" class="btn btn-danger mb-2">Выйти из профиля</a>
         <a href="{% url 'favorites' %}" class="btn btn-info mb-2">Избранное</a>
 
-        <!-- Карточка пользователя -->
+        
         <div class="card mb-4">
             <div class="card-body">
                
-                <!-- Информация о пользователе -->
+                
                 <p class="card-text"><strong>Email:</strong> {{ user.email }}</p>
                 <p class="card-text"><strong>Имя:</strong> {{ user.profile.firstname }}</p>
                 <p class="card-text"><strong>Фамилия:</strong> {{ user.profile.lastname }}</p>
                 <p class="card-text"><strong>Номер телефона:</strong> {{ user.profile.phone_number }}</p>
                
                 
-                    <!-- Личные публикации пользователя -->
+                    
                     <h3 class="mt-4">Личные публикации</h3>
                     <div class="row mb-4">
                         {% for product in products %}
@@ -54,7 +54,7 @@
         </div>
     
         
-    <!-- Модальное окно подтверждения удаления продукта -->
+    
     {% for product in products %}
     <div class="modal fade" id="deleteProductModal{{ product.pk }}" tabindex="-1" role="dialog" aria-labelledby="deleteProductModalLabel{{ product.pk }}" aria-hidden="true">
         <div class="modal-dialog" role="document">

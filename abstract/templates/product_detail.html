@@ -1,13 +1,13 @@
-<!-- product_detail.html -->
+
 {% extends 'base_generic.html' %}
 
 {% block content %}
 
-  <!-- Контент страницы -->
+  
   <div class="container mt-5">
     <div class="row">
       <div class="col-md-8">
-        <!-- Карточка продукта -->
+        
         <div class="card">
           <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.title }}">
           <div class="card-body">
@@ -21,7 +21,7 @@
           </div>
         </div>
         <div class="mt-5">
-          <!-- Блок с отзывами -->
+         
           <h2>Отзывы</h2>
           {% for review in reviews %}
             <div class="card mb-3">
@@ -34,7 +34,7 @@
             </div>
           {% endfor %}
         </div>
-        <!-- Модальное окно с информацией об авторе -->
+       
         <div class="modal fade" id="authorModal" tabindex="-1" role="dialog" aria-labelledby="authorModalLabel" aria-hidden="true">
           <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -46,7 +46,7 @@
               </div>
               <div class="modal-body">
                 <p><strong>Имя автора:</strong> {{ product.seller }}</p>
-                <!-- Добавьте другие поля по вашему усмотрению -->
+                
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
@@ -57,17 +57,17 @@
         </div>
       </div>
       <div class="col-md-4">
-        <!-- Блок с информацией об авторе и кнопкой -->
+        
         <div class="card mt-4">
           <div class="card-body">
             <h2 class="card-title">Информация об авторе</h2>
             <p><strong>Имя автора:</strong> {{ product.seller }}</p>
             <a href="{% url 'view_other_user_profile' username=product.seller.username %}" class="btn btn-primary">Перейти на профиль</a>
-            <!-- Кнопка "Показать номер телефона" с модальным окном -->
+            
         <button type="button" class="btn btn-info mt-2" data-toggle="modal" data-target="#phoneModal">
           Показать номер телефона
       </button>
- <!-- Добавьте другие блоки, в том числе кнопку "Показать похожие товары" -->
+ 
          <a href="{% url 'similar_products' product.id %}" class="btn btn-primary mt-2">Показать похожие товары</a>
          
         <h1></h1>
@@ -76,7 +76,7 @@
           <button type="submit" class="btn btn-primary">Добавить в избранное</button>
         </form>
 
-      <!-- Модальное окно с номером телефона -->
+      
       <div class="modal fade" id="phoneModal" tabindex="-1" role="dialog" aria-labelledby="phoneModalLabel" aria-hidden="true">
           <div class="modal-dialog" role="document">
               <div class="modal-content">
@@ -87,7 +87,7 @@
                       </button>
                   </div>
                   <div class="modal-body">
-                      <!-- Здесь используйте переменную, содержащую номер телефона автора -->
+                    
                       <p><strong>Номер телефона:</strong> {{ product.seller.profile.phone_number }}</p>
                   </div>
                   <div class="modal-footer">
@@ -122,7 +122,7 @@
                   </p>
                 {% endif %}
         
-                <!-- Шкала сравнения цен с использованием иконок -->
+               
                 <div class="mt-4 d-flex align-items-center justify-content-between">
                   {% if avg_price_comparison.is_cheaper %}
                     <span class="text-muted">Низкая цена</span>
@@ -141,7 +141,7 @@
           {% endif %}
         </div>
 
-        <!-- Форма создания отзыва -->
+        
         <div class="card mt-4">
           <div class="card-body">
             <h2 class="card-title">Оставить отзыв</h2>
@@ -159,7 +159,7 @@
   </div>
 
   <style>
-    /* Пользовательские стили для анимации формы */
+
     .animated-form {
       animation: fadeInUp 0.5s ease;
     }

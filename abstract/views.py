@@ -61,9 +61,9 @@ def login_view(request):
 def product_list(request):
     product_list = Product.objects.all()
 
-    # Добавляем пагинацию
+   
     page = request.GET.get('page', 1)
-    paginator = Paginator(product_list, 10)  # 10 объявлений на каждой странице
+    paginator = Paginator(product_list, 10)  
 
     try:
         products = paginator.page(page)
@@ -111,16 +111,16 @@ def search_products(request):
     return render(request, 'product_list.html', context)
 
 
-@custom_login_required  # Это декоратор, который требует аутентификации пользователя
+@custom_login_required  
 def create_product(request):
     if request.method == 'POST':
         form = ProductForm(request.POST, request.FILES)
         if form.is_valid():
-            # Сохраняем форму, но перед этим устанавливаем seller на текущего пользователя
+          
             product = form.save(commit=False)
-            product.seller = request.user  # Устанавливаем seller на текущего пользователя
+            product.seller = request.user  
             product.save()
-            return redirect('product_list')  # Перенаправляем на страницу со списком продуктов
+            return redirect('product_list')  
     else:
         form = ProductForm()
 
@@ -132,10 +132,10 @@ def product_detail(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     reviews = Review.objects.filter(product=product)
 
-    # Рассчитываем среднюю цену в категории текущего товара
+   
     category_avg_price = Product.objects.filter(category=product.category).aggregate(Avg('price'))['price__avg']
 
-    # Обработка отправки отзыва
+
     if request.method == 'POST':
         form = ReviewForm(request.POST)
         if form.is_valid():
@@ -143,12 +143,11 @@ def product_detail(request, product_id):
             review.product = product
             review.user = request.user
             review.save()
-            # Перенаправление для избежания повторной отправки формы
+
             return HttpResponseRedirect(request.path_info)
     else:
         form = ReviewForm()
 
-    # Передаем результаты расчета и отзывы в контекст
     context = {
         'product': product,
         'avg_price_comparison': {
@@ -195,16 +194,15 @@ def edit_product(request, pk):
 def delete_product(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
 
-    # Проверяем, что текущий пользователь является продавцом продукта
+
     if request.user != product.seller:
         messages.error(request, "Вы не можете удалить этот продукт.")
-        return redirect('user_profile_page')  # Или замените на URL вашей профильной страницы
-
-    # Обработка запроса POST для удаления продукта
+        return redirect('user_profile_page')  
+   
     if request.method == 'POST':
         product.delete()
         messages.success(request, "Продукт успешно удален.")
-        return redirect('user_profile_page')  # Или замените на URL вашей профильной страницы
+        return redirect('user_profile_page') 
 
     return render(request, 'delete_product.html', {'product': product})
 
@@ -225,22 +223,20 @@ def view_other_user_profile(request, username):
 
 def custom_logout(request):
     logout(request)
-    # После выхода перенаправляем на главную страницу (можно изменить URL по вашему желанию)
+    
     return redirect('product_list')
 
 def city_list(request):
-    # Если запрос GET, пытаемся фильтровать по городу
+    
     if request.method == 'GET':
         form = CityFilterForm(request.GET)
         if form.is_valid():
             city = form.cleaned_data['city']
-            # Фильтруем продукты по выбранному городу
+            
             products = Product.objects.filter(city=city)
         else:
-            # Если форма не валидна, выводим все продукты
             products = Product.objects.all()
     else:
-        # Если запрос не GET, выводим все продукты
         products = Product.objects.all()
         form = CityFilterForm()
 
@@ -255,7 +251,7 @@ class SimilarProductsView(View):
         product_id = kwargs.get('product_id')
         current_product = get_object_or_404(Product, id=product_id)
 
-        # Получите похожие товары (замените это на вашу логику выбора похожих товаров)
+       
         similar_products = Product.objects.filter(category=current_product.category).exclude(id=product_id)[:10]
 
         context = {'similar_products': similar_products, 'current_product': current_product}
@@ -280,7 +276,7 @@ def parse_olx():
         soup = BeautifulSoup(response.text, 'html.parser')
         products = []
 
-        # Пример: парсинг заголовков объявлений, цен и категорий
+        
         titles = soup.select('.offer-titlebox h3 a')
         prices = soup.select('.price strong')
         categories = soup.select('.breadcrumb span a')
@@ -303,17 +299,17 @@ def olx_products(request):
 
 @custom_login_required
 def add_to_favorites(request, product_id):
-    # Получаем объект товара
+  
     product = get_object_or_404(Product, id=product_id)
 
-    # Проверка, есть ли уже такой товар в избранном у пользователя
+   
     existing_favorite = Favorite.objects.filter(user=request.user, product=product).exists()
 
     if not existing_favorite:
-        # Если нет, то добавляем в избранное
+ 
         Favorite.objects.create(user=request.user, product=product)
 
-    return redirect('product_list')  # Или замените на URL, куда вы хотите перенаправить после добавления в избранное
+    return redirect('product_list')  
 
 
 @custom_login_required
