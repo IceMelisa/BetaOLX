@@ -7,8 +7,8 @@ from django.utils import timezone
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-    phone_number = models.CharField(max_length=15, blank=True, null=True, verbose_name='Номер телефона')  # Пример, можно настроить под свои нужды
-    profilepicture = models.ImageField(upload_to='', blank=True, null=True, verbose_name='Фотография профиля')  # Пример папки для хранения изображений
+    phone_number = models.CharField(max_length=15, blank=True, null=True, verbose_name='Номер телефона')  
+    profilepicture = models.ImageField(upload_to='', blank=True, null=True, verbose_name='Фотография профиля')  
     firstname = models.CharField(max_length=30, blank=True, null=True, verbose_name='Имя')
     lastname = models.CharField(max_length=30, blank=True, null=True, verbose_name='Фамилия')
 
